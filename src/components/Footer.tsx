@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Facebook, Linkedin, Github, Send, Sparkles } from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import React, { useState } from "react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Linkedin,
+  Github,
+  Send,
+  Sparkles,
+} from "lucide-react";
+import { toast } from "react-hot-toast";
 
 interface FooterProps {
   setCurrentTab: (tab: string) => void;
 }
 
 export default function Footer({ setCurrentTab }: FooterProps) {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
   const handleSubscribe = (e: React.FormEvent) => {
@@ -15,39 +24,53 @@ export default function Footer({ setCurrentTab }: FooterProps) {
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email.trim()) {
-      toast.error('Vui lòng nhập địa chỉ email của bạn.');
+      toast.error("Vui lòng nhập địa chỉ email của bạn.");
       return;
     }
     if (!emailRegex.test(email.trim())) {
-      toast.error('Vui lòng nhập email đúng định dạng (VD: example@domain.com).');
+      toast.error(
+        "Vui lòng nhập email đúng định dạng (VD: example@domain.com).",
+      );
       return;
     }
 
     setSubscribed(true);
-    setEmail('');
-    toast.success('Đăng ký nhận bản tin thành công! Bạn sẽ nhận được các thông tin tối ưu SEO & Website mới nhất.');
+    setEmail("");
+    toast.success(
+      "Đăng ký nhận bản tin thành công! Bạn sẽ nhận được các thông tin tối ưu SEO & Website mới nhất.",
+    );
     setTimeout(() => setSubscribed(false), 5000); // Ẩn thông báo sau 5 giây
   };
 
   const handleQuickLink = (tab: string) => {
     setCurrentTab(tab);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <footer id="app-footer" className="bg-slate-950 border-t border-slate-900 text-slate-400 relative z-10">
+    <footer
+      id="app-footer"
+      className="bg-slate-950 border-t border-slate-900 text-slate-400 relative z-10"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Logo & Intro */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleQuickLink('home')}>
+            <div
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={() => handleQuickLink("home")}
+            >
               <span className="text-2xl font-bold font-display text-white tracking-tight">
-                <span className="bg-gradient-to-r from-blue-500 to-sky-400 bg-clip-text text-transparent">UP</span>
+                <span className="bg-gradient-to-r from-blue-500 to-sky-400 bg-clip-text text-transparent">
+                  UP
+                </span>
                 hostix
               </span>
             </div>
             <p className="text-sm leading-relaxed text-slate-400">
-              UPhostix Agency tiên phong thiết kế giao dịch kỹ thuật số xuất sắc. Chúng tôi kết hợp chiến lược SEO chuẩn mực và công nghệ Web đỉnh cao để gia tăng vị thế số hiệu quả cho doanh nghiệp của bạn.
+              UPhostix Agency tiên phong thiết kế giao dịch kỹ thuật số xuất
+              sắc. Chúng tôi kết hợp chiến lược SEO chuẩn mực và công nghệ Web
+              đỉnh cao để gia tăng vị thế số hiệu quả cho doanh nghiệp của bạn.
             </p>
             <div className="flex gap-4 pt-2">
               <a
@@ -76,11 +99,13 @@ export default function Footer({ setCurrentTab }: FooterProps) {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-white font-semibold mb-4 tracking-wider uppercase text-xs">Phân Mục</h3>
+            <h3 className="text-white font-semibold mb-4 tracking-wider uppercase text-xs">
+              Phân Mục
+            </h3>
             <ul className="space-y-2.5 text-sm">
               <li>
                 <button
-                  onClick={() => handleQuickLink('home')}
+                  onClick={() => handleQuickLink("home")}
                   className="hover:text-blue-400 hover:underline transition-all text-left cursor-pointer"
                 >
                   Trang Chủ
@@ -88,7 +113,7 @@ export default function Footer({ setCurrentTab }: FooterProps) {
               </li>
               <li>
                 <button
-                  onClick={() => handleQuickLink('services')}
+                  onClick={() => handleQuickLink("services")}
                   className="hover:text-blue-400 hover:underline transition-all text-left cursor-pointer"
                 >
                   Dịch Vụ Số
@@ -96,7 +121,7 @@ export default function Footer({ setCurrentTab }: FooterProps) {
               </li>
               <li>
                 <button
-                  onClick={() => handleQuickLink('projects')}
+                  onClick={() => handleQuickLink("projects")}
                   className="hover:text-blue-400 hover:underline transition-all text-left cursor-pointer"
                 >
                   Dự Án Thực Chiến
@@ -104,7 +129,7 @@ export default function Footer({ setCurrentTab }: FooterProps) {
               </li>
               <li>
                 <button
-                  onClick={() => handleQuickLink('blog')}
+                  onClick={() => handleQuickLink("blog")}
                   className="hover:text-blue-400 hover:underline transition-all text-left cursor-pointer"
                 >
                   Tin Tức & Blog
@@ -112,7 +137,7 @@ export default function Footer({ setCurrentTab }: FooterProps) {
               </li>
               <li>
                 <button
-                  onClick={() => handleQuickLink('about')}
+                  onClick={() => handleQuickLink("about")}
                   className="hover:text-blue-400 hover:underline transition-all text-left cursor-pointer"
                 >
                   Về Chúng Tôi
@@ -120,7 +145,7 @@ export default function Footer({ setCurrentTab }: FooterProps) {
               </li>
               <li>
                 <button
-                  onClick={() => handleQuickLink('contact')}
+                  onClick={() => handleQuickLink("contact")}
                   className="hover:text-blue-400 hover:underline transition-all text-left cursor-pointer"
                 >
                   Liên Hệ Ngay
@@ -131,22 +156,30 @@ export default function Footer({ setCurrentTab }: FooterProps) {
 
           {/* Contact Details */}
           <div>
-            <h3 className="text-white font-semibold mb-4 tracking-wider uppercase text-xs">Thông Tin Liên Hệ</h3>
+            <h3 className="text-white font-semibold mb-4 tracking-wider uppercase text-xs">
+              Thông Tin Liên Hệ
+            </h3>
             <ul className="space-y-3.5 text-sm">
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
-                <span>Toà nhà UPhostix Space, Quận 1, Thành phố Hồ Chí Minh, Việt Nam</span>
+                <span>225 Trần Thị Cờ, Hiệp Thành, Thới An, Hồ Chí Minh</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-blue-500 shrink-0" />
-                <a href="tel:0988888888" className="hover:text-white transition-colors">
-                  098 888 8888 / 028 9999 9999
+                <a
+                  href="tel:0398938928"
+                  className="hover:text-white transition-colors"
+                >
+                  0398 938 928 / 0789 748 416
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-blue-500 shrink-0" />
-                <a href="mailto:contact@uphostix.com" className="hover:text-white transition-colors">
-                  contact@uphostix.com
+                <a
+                  href="ungnhophu.word@gmail.com"
+                  className="hover:text-white transition-colors"
+                >
+                  ungnhophu.word@gmail.com
                 </a>
               </li>
             </ul>
@@ -154,9 +187,12 @@ export default function Footer({ setCurrentTab }: FooterProps) {
 
           {/* Newsletter */}
           <div>
-            <h3 className="text-white font-semibold mb-4 tracking-wider uppercase text-xs font-sans">Đăng Ký Nhận Bản Tin</h3>
+            <h3 className="text-white font-semibold mb-4 tracking-wider uppercase text-xs font-sans">
+              Đăng Ký Nhận Bản Tin
+            </h3>
             <p className="text-sm text-slate-400 mb-4 leading-relaxed">
-              Nhận ngay các xu hướng công nghệ số, chiến lược tối ưu SEO và những ưu đãi thiết kế website độc quyền hàng tháng.
+              Nhận ngay các xu hướng công nghệ số, chiến lược tối ưu SEO và
+              những ưu đãi thiết kế website độc quyền hàng tháng.
             </p>
             {subscribed ? (
               <div className="p-3 bg-emerald-950/40 border border-emerald-800 text-emerald-400 text-xs rounded-xl flex items-center gap-2">
@@ -190,17 +226,17 @@ export default function Footer({ setCurrentTab }: FooterProps) {
           <p className="flex items-center justify-center gap-2 flex-wrap">
             <span>© 2026 UPhostix Agency. Toàn bộ quyền được bảo lưu.</span>
             <span className="text-slate-800">•</span>
-            <button 
-              onClick={() => setCurrentTab('admin')} 
+            <button
+              onClick={() => setCurrentTab("admin")}
               className="text-slate-500 hover:text-blue-400 transition-colors uppercase tracking-wider font-semibold text-[10px]"
             >
               Cổng Quản Trị
             </button>
           </p>
           <p>
-            Thiết kế và lập trình bởi{' '}
+            Thiết kế và lập trình bởi{" "}
             <span className="text-white font-medium hover:text-blue-400 transition-colors cursor-pointer">
-              UPhostix Senior Engineers
+              UPhostix Agency
             </span>
           </p>
         </div>

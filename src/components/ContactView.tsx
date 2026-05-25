@@ -1,9 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { FAQS } from '../data';
-import { ContactMessage } from '../types';
-import { motion, AnimatePresence } from 'motion/react';
-import { Mail, Phone, MapPin, CheckCircle2, ChevronDown, ChevronUp, Sparkles, MessageSquare, Trash2, Calendar, Send, ShieldAlert } from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import React, { useState, useEffect } from "react";
+import { FAQS } from "../data";
+import { ContactMessage } from "../types";
+import { motion, AnimatePresence } from "motion/react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  CheckCircle2,
+  ChevronDown,
+  ChevronUp,
+  Sparkles,
+  MessageSquare,
+  Trash2,
+  Calendar,
+  Send,
+  ShieldAlert,
+} from "lucide-react";
+import { toast } from "react-hot-toast";
 
 interface ContactViewProps {
   initialQuotationData?: {
@@ -14,28 +27,33 @@ interface ContactViewProps {
   clearInitialQuotation?: () => void;
 }
 
-export default function ContactView({ initialQuotationData, clearInitialQuotation }: ContactViewProps) {
+export default function ContactView({
+  initialQuotationData,
+  clearInitialQuotation,
+}: ContactViewProps) {
   // Form fields
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [serviceType, setServiceType] = useState('web');
-  const [budget, setBudget] = useState('medium');
-  const [message, setMessage] = useState('');
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [serviceType, setServiceType] = useState("web");
+  const [budget, setBudget] = useState("medium");
+  const [message, setMessage] = useState("");
 
   // UI state
   const [submitted, setSubmitted] = useState(false);
-  const [errMessage, setErrMessage] = useState('');
+  const [errMessage, setErrMessage] = useState("");
   const [activeFaqId, setActiveFaqId] = useState<string | null>(null);
-  const [faqTab, setFaqTab] = useState<'all' | 'general' | 'technical' | 'pricing'>('all');
+  const [faqTab, setFaqTab] = useState<
+    "all" | "general" | "technical" | "pricing"
+  >("all");
   const [savedMessages, setSavedMessages] = useState<ContactMessage[]>([]);
 
   // Apply quote estimator values if exists
   useEffect(() => {
     if (initialQuotationData) {
-      setFullName('Khách Hàng Trải Nghiệm');
-      setPhone('090 1234 567');
-      setEmail('customer@example.com');
+      setFullName("Khách Hàng Trải Nghiệm");
+      setPhone("090 1234 567");
+      setEmail("customer@example.com");
       setServiceType(initialQuotationData.serviceType);
       setBudget(initialQuotationData.budget);
       setMessage(initialQuotationData.message);
@@ -44,7 +62,7 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
 
   // Load registered messages from local storage
   useEffect(() => {
-    const historical = localStorage.getItem('uphostix_contacts');
+    const historical = localStorage.getItem("uphostix_contacts");
     if (historical) {
       try {
         setSavedMessages(JSON.parse(historical));
@@ -58,7 +76,7 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
     e.preventDefault();
 
     if (!fullName.trim() || !email.trim() || !phone.trim() || !message.trim()) {
-      const err = 'Vui lòng điền đầy đủ các thông tin bắt buộc trước khi gửi.';
+      const err = "Vui lòng điền đầy đủ các thông tin bắt buộc trước khi gửi.";
       setErrMessage(err);
       toast.error(err);
       return;
@@ -67,30 +85,38 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email.trim())) {
-      const err = 'Địa chỉ email không hợp lệ. Vui lòng kiểm tra lại.';
+      const err = "Địa chỉ email không hợp lệ. Vui lòng kiểm tra lại.";
       setErrMessage(err);
       toast.error(err);
       return;
     }
 
     const newMessage: ContactMessage = {
-      id: 'msg_' + Date.now(),
+      id: "msg_" + Date.now(),
       fullName,
       email,
       phone,
       serviceType,
       budget,
       message,
-      createdAt: new Date().toLocaleDateString('vi-VN') + ' ' + new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+      createdAt:
+        new Date().toLocaleDateString("vi-VN") +
+        " " +
+        new Date().toLocaleTimeString("vi-VN", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
     };
 
     const updated = [newMessage, ...savedMessages];
     setSavedMessages(updated);
-    localStorage.setItem('uphostix_contacts', JSON.stringify(updated));
+    localStorage.setItem("uphostix_contacts", JSON.stringify(updated));
 
     setSubmitted(true);
-    setErrMessage('');
-    toast.success(`Yêu cầu tư vấn của anh/chị ${fullName} đã được tiếp nhận thành công!`);
+    setErrMessage("");
+    toast.success(
+      `Yêu cầu tư vấn của anh/chị ${fullName} đã được tiếp nhận thành công!`,
+    );
 
     // Highlight message
     if (clearInitialQuotation) {
@@ -99,31 +125,34 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
   };
 
   const handleResetForm = () => {
-    setFullName('');
-    setEmail('');
-    setPhone('');
-    setServiceType('web');
-    setBudget('medium');
-    setMessage('');
+    setFullName("");
+    setEmail("");
+    setPhone("");
+    setServiceType("web");
+    setBudget("medium");
+    setMessage("");
     setSubmitted(false);
   };
 
   const handleDeleteMessage = (id: string) => {
     const filtered = savedMessages.filter((m) => m.id !== id);
     setSavedMessages(filtered);
-    localStorage.setItem('uphostix_contacts', JSON.stringify(filtered));
+    localStorage.setItem("uphostix_contacts", JSON.stringify(filtered));
   };
 
   // Filter FAQs list
   const filteredFaqs = FAQS.filter((f) => {
-    if (faqTab === 'all') return true;
+    if (faqTab === "all") return true;
     return f.category === faqTab;
   });
 
   return (
     <div id="contact-view" className="space-y-24 pt-32 pb-20 bg-transparent">
       {/* 🚀 CONTACT HEADER */}
-      <section id="contact-hero-header" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+      <section
+        id="contact-hero-header"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6"
+      >
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -139,7 +168,7 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-4xl sm:text-5xl md:text-6xl font-extrabold font-display leading-tight text-white max-w-4xl mx-auto"
         >
-          Sẵn Sàng Đưa Ý Tưởng{' '}
+          Sẵn Sàng Đưa Ý Tưởng{" "}
           <span className="bg-gradient-to-r from-blue-400 via-blue-500 to-sky-400 bg-clip-text text-transparent">
             Vươn Xa Đột Phá?
           </span>
@@ -150,12 +179,17 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-slate-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed"
         >
-          Hãy để lại thông tin của bạn. Đội ngũ kỹ thuật viên cao cấp của UPhostix sẽ liên hệ lại phân tích giải pháp tối ưu SEO và cấu hình phác thảo trong vòng 2 giờ làm việc.
+          Hãy để lại thông tin của bạn. Đội ngũ kỹ thuật viên cao cấp của
+          UPhostix sẽ liên hệ lại phân tích giải pháp tối ưu SEO và cấu hình
+          phác thảo trong vòng 2 giờ làm việc.
         </motion.p>
       </section>
 
       {/* 📬 MAIN CONTACT VIEW & MAP */}
-      <section id="contact-details-form" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section
+        id="contact-details-form"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+      >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           {/* Left panel contact info & map */}
           <div className="lg:col-span-5 space-y-8">
@@ -168,22 +202,36 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
                 <li className="flex items-start gap-3.5">
                   <MapPin className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
                   <div className="space-y-1">
-                    <p className="text-white font-bold">Văn Phòng TP. Hồ Chí Minh</p>
-                    <p className="text-slate-450 text-xs sm:text-sm">Toà nhà UPhostix Space, Quận 1, Thành phố Hồ Chí Minh, Việt Nam</p>
+                    <p className="text-white font-bold">
+                      Văn Phòng TP. Hồ Chí Minh
+                    </p>
+                    <p className="text-slate-450 text-xs sm:text-sm">
+                      225 Trần Thị Cờ, Hiệp Thành, Thới An, Hồ Chí Minh
+                    </p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3.5">
                   <Phone className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
                   <div className="space-y-1">
-                    <p className="text-white font-bold">Đường Dây Hỗ Trợ Kỹ Thuật</p>
-                    <a href="tel:0988888888" className="text-slate-450 text-xs sm:text-sm hover:text-white transition">098 888 8888 / 028 9999 9999</a>
+                    <p className="text-white font-bold">Điện Thoại / Zalo</p>
+                    <a
+                      href="tel:0398938928"
+                      className="text-slate-450 text-xs sm:text-sm hover:text-white transition"
+                    >
+                      0398 938 928 / 0789 748 416
+                    </a>
                   </div>
                 </li>
                 <li className="flex items-start gap-3.5">
                   <Mail className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
                   <div className="space-y-1">
-                    <p className="text-white font-bold">Thư Ký Đấu Thầu & Dự Án</p>
-                    <a href="mailto:contact@uphostix.com" className="text-slate-450 text-xs sm:text-sm hover:text-white transition">contact@uphostix.com</a>
+                    <p className="text-white font-bold">Gmail Công Việc</p>
+                    <a
+                      href="mailto:ungnhophu.word@gmail.com"
+                      className="text-slate-450 text-xs sm:text-sm hover:text-white transition"
+                    >
+                      ungnhophu.word@gmail.com
+                    </a>
                   </div>
                 </li>
               </ul>
@@ -193,10 +241,16 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
             <div className="relative group rounded-2xl overflow-hidden border border-slate-800 shadow-xl">
               <div className="absolute inset-x-0 bottom-0 bg-slate-950/80 p-4 border-t border-white/5 backdrop-blur-md z-10 flex justify-between items-center text-xs">
                 <div>
-                  <p className="text-white font-bold">Trụ sở UPhostix Vietnam</p>
-                  <p className="text-slate-400 text-[10px]">Đường Hai Bà Trưng, Phường Bến Nghé, Quận 1</p>
+                  <p className="text-white font-bold">
+                    Trụ sở UPhostix Vietnam
+                  </p>
+                  <p className="text-slate-400 text-[10px]">
+                    Đường Hai Bà Trưng, Phường Bến Nghé, Quận 1
+                  </p>
                 </div>
-                <span className="text-blue-400 font-mono text-[10px] font-bold px-2 py-0.5 bg-blue-500/10 rounded">Live Office</span>
+                <span className="text-blue-400 font-mono text-[10px] font-bold px-2 py-0.5 bg-blue-500/10 rounded">
+                  Live Office
+                </span>
               </div>
               <img
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuACVnPUXY5AQWYOUbG11scuGXutnCboGwRjNjAItU7FzE5pbyFJtDEeW1smNsIS8ruzknjL3QbVCvAGdQKy82a3-btardTeBu4bj1gCU-OZOCsohJzk-JGPtJ1YiLMRy4D_zfzg84nxq5LT6SGpq2BOsFdYqRMP8u168euBehbyVwZRxSqoLvp0rji9wdQ7OrPk2lOhB_UN_TF6UAa4G5dueCGbMoPpV4ZmhWefdteRCpqOmBJFumaWWPDiy5i49fotHX3qndLCUPfK"
@@ -215,21 +269,31 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
                   <CheckCircle2 className="w-10 h-10 animate-bounce text-emerald-400" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-white text-2xl font-bold font-display tracking-tight">Gửi Yêu Cầu Thành Công!</h3>
+                  <h3 className="text-white text-2xl font-bold font-display tracking-tight">
+                    Gửi Yêu Cầu Thành Công!
+                  </h3>
                   <p className="text-slate-400 text-sm max-w-md mx-auto">
-                    Biểu mẫu của bạn đã được chuyển thẳng tới đội ngũ quản trị dịch vụ UPhostix. Chúng tôi sẽ gọi lại thảo luận chi tiết theo thông tin đăng ký.
+                    Biểu mẫu của bạn đã được chuyển thẳng tới đội ngũ quản trị
+                    dịch vụ UPhostix. Chúng tôi sẽ gọi lại thảo luận chi tiết
+                    theo thông tin đăng ký.
                   </p>
                 </div>
 
                 {/* Promotional Code for user interactions */}
                 <div className="max-w-md mx-auto p-4 bg-blue-600/10 border border-blue-500/20 rounded-xl relative overflow-hidden space-y-2">
                   <Sparkles className="w-4 h-4 text-blue-450 absolute top-2 right-2 animate-spin" />
-                  <p className="text-[11px] text-blue-400 uppercase tracking-widest font-bold">Món Quà Trải Nghiệm Công Nghệ</p>
-                  <p className="text-white text-sm font-semibold">Mã giảm giá 10% gói thiết kế website độc quyền:</p>
+                  <p className="text-[11px] text-blue-400 uppercase tracking-widest font-bold">
+                    Món Quà Trải Nghiệm Công Nghệ
+                  </p>
+                  <p className="text-white text-sm font-semibold">
+                    Mã giảm giá 10% gói thiết kế website độc quyền:
+                  </p>
                   <p className="text-white text-lg font-bold font-mono tracking-widest bg-slate-950 py-1.5 rounded-lg border border-slate-850 select-all cursor-pointer">
                     UPHOSTIX2026
                   </p>
-                  <p className="text-[10px] text-slate-500">* Áp dụng cho hợp đồng ký kết trước ngày 31/12/2026</p>
+                  <p className="text-[10px] text-slate-500">
+                    * Áp dụng cho hợp đồng ký kết trước ngày 31/12/2026
+                  </p>
                 </div>
 
                 <div className="pt-6">
@@ -244,8 +308,13 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
             ) : (
               <form onSubmit={handleFormSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <h2 className="text-white text-xl sm:text-2xl font-bold font-display tracking-tight">Khởi Động Đột Phá Số</h2>
-                  <p className="text-slate-400 text-xs sm:text-sm">Hãy hoàn tất ghi chú của bạn để sẵn sàng cùng UPhostix kiến tạo bệ phóng số lý tưởng.</p>
+                  <h2 className="text-white text-xl sm:text-2xl font-bold font-display tracking-tight">
+                    Khởi Động Đột Phá Số
+                  </h2>
+                  <p className="text-slate-400 text-xs sm:text-sm">
+                    Hãy hoàn tất ghi chú của bạn để sẵn sàng cùng UPhostix kiến
+                    tạo bệ phóng số lý tưởng.
+                  </p>
                 </div>
 
                 {errMessage && (
@@ -258,7 +327,12 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
                 {initialQuotationData && (
                   <div className="p-3 bg-blue-600/10 border border-blue-500/20 text-blue-300 text-xs rounded-xl flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-blue-450 shrink-0" />
-                    <span>Đã nạp thông số tự tính từ bộ Calculator: <strong className="text-white">{initialQuotationData.budget}</strong></span>
+                    <span>
+                      Đã nạp thông số tự tính từ bộ Calculator:{" "}
+                      <strong className="text-white">
+                        {initialQuotationData.budget}
+                      </strong>
+                    </span>
                   </div>
                 )}
 
@@ -323,7 +397,9 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
                       <option value="web">Thiết Kế Website & App</option>
                       <option value="seo">Tối Ưu SEO & Marketing</option>
                       <option value="branding">Thương Hiệu & Nhận Diện</option>
-                      <option value="maintenance">Vận Hành & Bảo Trì Hàng Tuần</option>
+                      <option value="maintenance">
+                        Vận Hành & Bảo Trì Hàng Tuần
+                      </option>
                       <option value="combo">Giải pháp Combo Trọn Gói</option>
                     </select>
                   </div>
@@ -336,10 +412,10 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
                   </label>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     {[
-                      { id: 'low', label: 'Dưới 15tr' },
-                      { id: 'medium', label: '15tr - 30tr' },
-                      { id: 'high', label: '30tr - 50tr' },
-                      { id: 'enterprise', label: 'Trên 50tr' }
+                      { id: "low", label: "Dưới 15tr" },
+                      { id: "medium", label: "15tr - 30tr" },
+                      { id: "high", label: "30tr - 50tr" },
+                      { id: "enterprise", label: "Trên 50tr" },
                     ].map((bd) => (
                       <button
                         key={bd.id}
@@ -347,8 +423,8 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
                         onClick={() => setBudget(bd.label)}
                         className={`py-3 text-center border rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                           budget === bd.label || budget === bd.id
-                            ? 'bg-blue-600/10 border-blue-500 text-blue-350'
-                            : 'bg-slate-950 border-slate-850 text-slate-500 hover:text-white hover:border-slate-800'
+                            ? "bg-blue-600/10 border-blue-500 text-blue-350"
+                            : "bg-slate-950 border-slate-850 text-slate-500 hover:text-white hover:border-slate-800"
                         }`}
                       >
                         {bd.label}
@@ -389,21 +465,31 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
       </section>
 
       {/* 🔮 INTERACTIVE FAQ SECTION */}
-      <section id="faq-interactive-tab-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section
+        id="faq-interactive-tab-section"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+      >
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-          <span className="text-blue-400 text-xs font-bold uppercase tracking-widest bg-blue-950/40 px-3 py-1 rounded-full border border-blue-800/55">Hỏi Đáp Đối Tác</span>
-          <h2 className="text-3xl sm:text-4xl font-bold font-display text-white tracking-tight">Giải Đáp Tường Tận Thắc Mắc</h2>
-          <p className="text-slate-400 text-sm leading-relaxed">Chúng tôi minh bạch mọi thông tin hạ tầng, báo giá và thời gian thiết kế xây dựng sản phẩm.</p>
+          <span className="text-blue-400 text-xs font-bold uppercase tracking-widest bg-blue-950/40 px-3 py-1 rounded-full border border-blue-800/55">
+            Hỏi Đáp Đối Tác
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold font-display text-white tracking-tight">
+            Giải Đáp Tường Tận Thắc Mắc
+          </h2>
+          <p className="text-slate-400 text-sm leading-relaxed">
+            Chúng tôi minh bạch mọi thông tin hạ tầng, báo giá và thời gian
+            thiết kế xây dựng sản phẩm.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Left Column FAQ Selector tabs */}
           <div className="lg:col-span-4 space-y-2.5">
             {[
-              { id: 'all', label: 'Tất Cả Thắc Mắc' },
-              { id: 'general', label: 'Câu Hỏi Chung' },
-              { id: 'technical', label: 'Kiến Thức Kỹ Thuật' },
-              { id: 'pricing', label: 'Báo Giá & Hợp Đồng' }
+              { id: "all", label: "Tất Cả Thắc Mắc" },
+              { id: "general", label: "Câu Hỏi Chung" },
+              { id: "technical", label: "Kiến Thức Kỹ Thuật" },
+              { id: "pricing", label: "Báo Giá & Hợp Đồng" },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -413,8 +499,8 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
                 }}
                 className={`w-full text-left px-5 py-4 rounded-xl text-sm font-semibold border transition-all cursor-pointer ${
                   faqTab === tab.id
-                    ? 'bg-blue-600/10 border-blue-500 text-blue-300'
-                    : 'bg-slate-900 border-slate-850 text-slate-400 hover:text-white hover:border-slate-800'
+                    ? "bg-blue-600/10 border-blue-500 text-blue-300"
+                    : "bg-slate-900 border-slate-850 text-slate-400 hover:text-white hover:border-slate-800"
                 }`}
               >
                 {tab.label}
@@ -450,7 +536,7 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
                     {isOpen && (
                       <motion.div
                         initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
+                        animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.25 }}
                       >
@@ -469,21 +555,33 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
 
       {/* 🕵️ ADMIN CORNER / LOCAL HISTORY INBOX */}
       {savedMessages.length > 0 && (
-        <section id="demo-inbox-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-900 pt-16">
+        <section
+          id="demo-inbox-section"
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-900 pt-16"
+        >
           <div className="bg-slate-950 border border-slate-800/80 rounded-3xl p-6 sm:p-10 space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-850 pb-4">
               <div className="flex items-center gap-2.5">
                 <MessageSquare className="w-5 h-5 text-blue-450" />
                 <div>
-                  <h3 className="text-white text-lg font-bold font-display tracking-tight">Hộp Thư Mô Phỏng Thực Tế (Local Storage)</h3>
-                  <p className="text-slate-500 text-[11px] mt-0.5">Với tư cách Trải Nghiệm Viên Senior, bạn gửi tin nhắn trên form sẽ cập nhật lưu trữ trực tiếp vào đây.</p>
+                  <h3 className="text-white text-lg font-bold font-display tracking-tight">
+                    Hộp Thư Mô Phỏng Thực Tế (Local Storage)
+                  </h3>
+                  <p className="text-slate-500 text-[11px] mt-0.5">
+                    Với tư cách Trải Nghiệm Viên Senior, bạn gửi tin nhắn trên
+                    form sẽ cập nhật lưu trữ trực tiếp vào đây.
+                  </p>
                 </div>
               </div>
               <button
                 onClick={() => {
-                  if (confirm('Bạn có chắc chắn muốn làm sạch toàn bộ hộp thư này?')) {
+                  if (
+                    confirm(
+                      "Bạn có chắc chắn muốn làm sạch toàn bộ hộp thư này?",
+                    )
+                  ) {
                     setSavedMessages([]);
-                    localStorage.removeItem('uphostix_contacts');
+                    localStorage.removeItem("uphostix_contacts");
                   }
                 }}
                 className="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 text-[10px] uppercase font-bold rounded-lg flex items-center gap-1.5 transition cursor-pointer"
@@ -502,8 +600,12 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
                   <div className="space-y-3">
                     <div className="flex justify-between items-start gap-4">
                       <div>
-                        <p className="text-white font-bold text-sm tracking-wide">{msg.fullName}</p>
-                        <p className="text-slate-500 text-[10px] sm:text-xs">ĐT: {msg.phone} | Email: {msg.email}</p>
+                        <p className="text-white font-bold text-sm tracking-wide">
+                          {msg.fullName}
+                        </p>
+                        <p className="text-slate-500 text-[10px] sm:text-xs">
+                          ĐT: {msg.phone} | Email: {msg.email}
+                        </p>
                       </div>
                       <span className="bg-emerald-500/10 text-emerald-400 font-mono text-[9px] font-bold uppercase px-2 py-0.5 rounded shrink-0">
                         ĐÃ KIỂM SOÁT
@@ -511,8 +613,12 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
                     </div>
 
                     <div className="p-3 bg-slate-950 border border-slate-850/80 rounded-xl space-y-1">
-                      <p className="text-[10px] text-slate-500 font-bold uppercase">Lời nhắn yêu cầu:</p>
-                      <p className="text-slate-300 text-xs leading-relaxed whitespace-pre-wrap">{msg.message}</p>
+                      <p className="text-[10px] text-slate-500 font-bold uppercase">
+                        Lời nhắn yêu cầu:
+                      </p>
+                      <p className="text-slate-300 text-xs leading-relaxed whitespace-pre-wrap">
+                        {msg.message}
+                      </p>
                     </div>
                   </div>
 
@@ -522,7 +628,10 @@ export default function ContactView({ initialQuotationData, clearInitialQuotatio
                       <span>{msg.createdAt}</span>
                     </div>
                     <div className="flex gap-2">
-                      <span className="text-blue-400 font-semibold uppercase">{msg.serviceType}</span> | <span>Ngân sách: {msg.budget}</span>
+                      <span className="text-blue-400 font-semibold uppercase">
+                        {msg.serviceType}
+                      </span>{" "}
+                      | <span>Ngân sách: {msg.budget}</span>
                     </div>
                   </div>
 
